@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-const String treMS = 'TrebuchetMS';
+class CustomFonts {
+  static String treMS = 'TrebuchetMS';
+}
 
 class CustomColor {
   static Color? colorBluegrey = Colors.blueGrey[900];
@@ -20,7 +22,7 @@ class TextFontStyle {
   static TextStyle textStyle1(Color color, double? size) {
     return TextStyle(
       color: color,
-      fontFamily: treMS,
+      fontFamily: CustomFonts.treMS,
       fontSize: size,
     );
   }

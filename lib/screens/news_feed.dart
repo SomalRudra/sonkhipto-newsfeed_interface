@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sonkhipto_news_interface/models/news.dart';
 import 'package:sonkhipto_news_interface/utils/size_config.dart';
 import 'package:sonkhipto_news_interface/utils/style.dart';
@@ -38,17 +39,33 @@ class _NewsFeedState extends State<NewsFeed> {
         body: Column(
           children: [
             Center(
-              child: SizedBox(
-                  height: SizeConfig.getScreenSize(context).height * 0.95,
+              child: Container(
+                  margin:
+                      EdgeInsets.only(top: SizeConfig.blockSizeHorizontal * 30),
+                  height: SizeConfig.getScreenSize(context).height * 0.7,
                   width: SizeConfig.getScreenSize(context).width * 0.95,
                   // margin: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
                   child: PageView.builder(
                     controller: pageController,
                     itemCount: newsList.length,
-                    itemBuilder: (context, index) =>
-                        NewsUI(news: newsList[index]),
+                    itemBuilder: (context, index) => NewsUI(
+                      news: newsList[index],
+                      controller: pageController,
+                    ),
                     onPageChanged: (index) => setState(() => pageIndex = index),
                   )),
+            ),
+            SizedBox(
+              height: SizeConfig.blockSizeHorizontal * 1,
+              child: SmoothPageIndicator(
+                  controller: pageController, // PageController
+                  count: 3,
+                  effect: ExpandingDotsEffect(
+                      dotColor: Colors.grey,
+                      dotWidth: SizeConfig.blockSizeHorizontal * 2,
+                      dotHeight: SizeConfig.blockSizeHorizontal * 2,
+                      activeDotColor: Colors.white), // your preferred effect
+                  onDotClicked: (index) {}),
             )
           ],
         ),

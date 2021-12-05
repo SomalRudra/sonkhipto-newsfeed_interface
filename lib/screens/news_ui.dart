@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sonkhipto_news_interface/models/news.dart';
 import 'package:sonkhipto_news_interface/utils/size_config.dart';
 import 'package:sonkhipto_news_interface/utils/style.dart';
 
 class NewsUI extends StatefulWidget {
   final News news;
+  final PageController controller;
 
-  const NewsUI({Key? key, required this.news}) : super(key: key);
+  const NewsUI({Key? key, required this.news, required this.controller})
+      : super(key: key);
 
   @override
   _NewsUIState createState() => _NewsUIState();
@@ -20,11 +23,28 @@ class _NewsUIState extends State<NewsUI> {
     SizeConfig().init(context);
 
     return Container(
-        margin: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 5),
+        margin: EdgeInsets.only(
+            left: SizeConfig.blockSizeHorizontal * 3,
+            right: SizeConfig.blockSizeHorizontal * 3),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          alignment: Alignment.center,
+          alignment: Alignment.bottomCenter,
           children: [
+            isExpanded
+                ? Container()
+                : Positioned(
+                    top: SizeConfig.blockSizeHorizontal * 10,
+                    child: SizedBox(
+                      width: SizeConfig.bodyWidth * 0.5,
+                      child: Text('Tap On The Image To Expand The News',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              letterSpacing: 0.5,
+                              fontFamily: CustomFonts.treMS,
+                              fontSize: SizeConfig.blockSizeHorizontal * 3)),
+                    )),
             backgroundNewsBodyWidget(context),
             foregroundNewsTitleWidget(),
           ],
@@ -35,12 +55,13 @@ class _NewsUIState extends State<NewsUI> {
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 500),
       bottom: isExpanded
-          ? SizeConfig.bodyHeight * 0.15
-          : SizeConfig.bodyHeight * 0.3,
+          ? SizeConfig.bodyHeight * 0.05
+          : SizeConfig.bodyHeight * 0.08,
       width:
           isExpanded ? SizeConfig.bodyWidth * 0.78 : SizeConfig.bodyWidth * 0.7,
-      height:
-          isExpanded ? SizeConfig.bodyHeight * 0.4 : SizeConfig.bodyWidth * 0.5,
+      height: isExpanded
+          ? SizeConfig.bodyHeight * 0.45
+          : SizeConfig.bodyWidth * 0.5,
       child: Container(
         decoration: BoxDecoration(
             boxShadow: [
@@ -88,14 +109,17 @@ class _NewsUIState extends State<NewsUI> {
   AnimatedPositioned foregroundNewsTitleWidget() {
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 500),
-      bottom: isExpanded
-          ? SizeConfig.bodyHeight * 0.35
-          : SizeConfig.bodyHeight * 0.25,
+      top: isExpanded
+          ? SizeConfig.bodyHeight * 0.02
+          : SizeConfig.bodyHeight * 0.22,
+      // bottom: isExpanded
+      //     ? SizeConfig.bodyHeight * 0.25
+      //     : SizeConfig.bodyHeight * 0.25,
       width:
           isExpanded ? SizeConfig.bodyWidth * 0.78 : SizeConfig.bodyWidth * 0.7,
       height: isExpanded
           ? SizeConfig.bodyHeight * 0.5
-          : SizeConfig.getScreenSize(context).height * 0.45,
+          : SizeConfig.bodyHeight * 0.8,
       child: GestureDetector(
         onPanUpdate: onPanUpdate,
         onTap: () {
